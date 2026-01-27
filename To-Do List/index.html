@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <section class="box">
+        <h2 class="header">To-Do List</h2>
+
+        <div class="input-form">
+            <input type="text" id="input-box" class="input-box" placeholder="Write Yout Task">
+            <button class="btn" onclick="addTask()">Add</button>
+        </div>
+
+        <ul id="todoList">
+
+        </ul>
+        <div class="empty-state" id="emptyState">No tasks yet. Add one to get started!</div>
+    </section>
+
+    <script>
+        const inputBox = document.getElementById("input-box")
+        const listContainer = document.getElementById("todoList")
+
+        function addTask() {
+            if (inputBox.value === "") {
+                alert("Write Something");
+            } else {
+                let li = document.createElement("li");
+                li.textContent = inputBox.value;
+                let span = document.createElement("span")
+                span.innerHTML = "\u00d7"
+                li.appendChild(span)
+                listContainer.appendChild(li);
+            }
+            inputBox.value = "";
+        }
+    </script>
+</body>
+
+</html>
