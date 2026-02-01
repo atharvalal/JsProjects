@@ -1,4 +1,4 @@
-import {cart, removeFromCart} from "../data/cart.js";
+import {cart, removeFromCart, saveToCart} from "../data/cart.js";
 import {products} from "../data/products.js";
 import {formatCurrency} from "./utils/money.js";
 
@@ -39,13 +39,12 @@ function renderCart() {
             <div class="cart-item-details">
               <div class="product-name">${matchingProduct.name}</div>
               <div class="product-price">$${formatCurrency(matchingProduct.priceCents)}</div>
-              <div class="product-quantity">
+              <div class="product-quantity js-quantity-container-${productID}">
                 <span>
-                  Quantity: <span class="quantity-label">${item.quantity}</span>
+                  Quantity: <span class="quantity-label js-quantity-label-${productID}">${item.quantity}</span>
                 </span>
-                <span class="update-quantity-link link-primary">Update</span>
+                <span class="update-quantity-link link-primary js-update-btn" data-product-id="${productID}">Update</span>
                 <span class="delete-quantity-link link-primary js-delete-btn" data-product-id="${productID}">Delete</span>
-                
               </div>
             </div>
 
@@ -127,30 +126,117 @@ function renderCart() {
 
         cartContent.innerHTML = checkouthtml;
 
-        attachDeleteListeners();
+        attachDeliveryListeners();
         attachPlaceOrderListener();
         updateOrderSummary();
         checkoutQuantity();
     }
 }
 
-//remove btn from checkout
-function attachDeleteListeners() {
-    document.querySelectorAll('.js-delete-btn').forEach((link) => {
-        link.addEventListener('click', (e) => {
-            e.preventDefault();
-            const productID = link.dataset.productId;
-            removeFromCart(productID);
+// Use event delegation on the parent container
+cartContent.addEventListener('click', (e) => {
+    // Handle delete button
+    if (e.target.classList.contains('js-delete-btn')) {
+        e.preventDefault();
+        const productID = e.target.dataset.productId;
+        removeFromCart(productID);
 
-            const container = document.querySelector(`.js-cart-item-container-${productID}`);
-            container.remove();
+        const container = document.querySelector(`.js-cart-item-container-${productID}`);
+        container.remove();
+
+        updateOrderSummary();
+        checkoutQuantity();
+    }
+
+    // Handle update button
+    if (e.target.classList.contains('js-update-btn')) {
+        e.preventDefault();
+        const productID = e.target.dataset.productId;
+
+        // Find the current quantity
+        let currentQuantity = 1;
+        cart.forEach((item) => {
+            if (item.productId === productID) {
+                currentQuantity = item.quantity;
+            }
+        });
+
+        // Show input field
+        const quantityContainer = document.querySelector(`.js-quantity-container-${productID}`);
+        quantityContainer.innerHTML = `
+            <input type="number" class="quantity-input js-quantity-input-${productID}" value="${currentQuantity}" min="1">
+            <span class="save-quantity-link link-primary js-save-quantity" data-product-id="${productID}">Save</span>
+            <span class="cancel-quantity-link link-primary js-cancel-quantity" data-product-id="${productID}">Cancel</span>
+        `;
+    }
+
+    // Handle save button
+    if (e.target.classList.contains('js-save-quantity')) {
+        e.preventDefault();
+        const productID = e.target.dataset.productId;
+        const newQuantity = Number(document.querySelector(`.js-quantity-input-${productID}`).value);
+
+        if (newQuantity > 0) {
+            // Update the quantity in cart
+            cart.forEach((item) => {
+                if (item.productId === productID) {
+                    item.quantity = newQuantity;
+                }
+            });
+
+            // Save to localStorage
+            saveToCart();
+
+            // Update the display
+            const quantityContainer = document.querySelector(`.js-quantity-container-${productID}`);
+            quantityContainer.innerHTML = `
+                <span>
+                  Quantity: <span class="quantity-label js-quantity-label-${productID}">${newQuantity}</span>
+                </span>
+                <span class="update-quantity-link link-primary js-update-btn" data-product-id="${productID}">Update</span>
+                <span class="delete-quantity-link link-primary js-delete-btn" data-product-id="${productID}">Delete</span>
+            `;
 
             updateOrderSummary();
             checkoutQuantity();
+        } else {
+            alert("Min Quantity must be 1 !!!")
+        }
+        
+    }
+
+    // Handle cancel button
+    if (e.target.classList.contains('js-cancel-quantity')) {
+        e.preventDefault();
+        const productID = e.target.dataset.productId;
+
+        // Find the current quantity
+        let currentQuantity = 1;
+        cart.forEach((item) => {
+            if (item.productId === productID) {
+                currentQuantity = item.quantity;
+            }
+        });
+
+        // Restore the original display
+        const quantityContainer = document.querySelector(`.js-quantity-container-${productID}`);
+        quantityContainer.innerHTML = `
+            <span>
+              Quantity: <span class="quantity-label js-quantity-label-${productID}">${currentQuantity}</span>
+            </span>
+            <span class="update-quantity-link link-primary js-update-btn" data-product-id="${productID}">Update</span>
+            <span class="delete-quantity-link link-primary js-delete-btn" data-product-id="${productID}">Delete</span>
+        `;
+    }
+});
+
+function attachDeliveryListeners() {
+    document.querySelectorAll('.js-delivery-option').forEach((radio) => {
+        radio.addEventListener('change', () => {
+            updateOrderSummary();
         });
     });
 }
-
 
 function attachPlaceOrderListener() {
     const placeOrderBtn = document.querySelector('.js-place-order');
@@ -197,7 +283,6 @@ function updateOrderSummary() {
     document.querySelector('.js-tax').textContent = `$${(tax / 100).toFixed(2)}`;
     document.querySelector('.js-order-total').textContent = `$${(orderTotal / 100).toFixed(2)}`;
 }
-
 
 function checkoutQuantity() {
     let totalItems = 0;
