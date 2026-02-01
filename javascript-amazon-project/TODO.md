@@ -1,0 +1,3 @@
+- [x] Fix quantity selector to be product-specific in amazon.js
+- [x] Update cart addition logic to add selected quantity instead of 1
+- [x] Reset quantity selector to 1 after adding to cart
