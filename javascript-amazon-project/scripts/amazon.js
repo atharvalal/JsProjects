@@ -85,8 +85,6 @@ document.querySelectorAll('.js-add-to-cart')
 
             const productSelector = document.querySelector(`.js-product-quantity-container-${productId}`)
             const quantity = Number(productSelector.value)
-            button.innerHTML = `Added !!`
-            button.style.backgroundColor = 'green'
 
             addToCart(productId, productName, productPrice, productImage, quantity)
             productSelector.value = '1'

@@ -1,34 +1,27 @@
 .main {
   margin-top: 60px;
+  background: linear-gradient(135deg, #f5f5f5 0%, #fafafa 100%);
+  padding-bottom: 40px;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
 .products-grid {
   display: grid;
-
-  /* - In CSS Grid, 1fr means a column will take up the
-       remaining space in the grid.
-     - If we write 1fr 1fr ... 1fr; 8 times, this will
-       divide the grid into 8 columns, each taking up an
-       equal amount of the space.
-     - repeat(8, 1fr); is a shortcut for repeating "1fr"
-       8 times (instead of typing out "1fr" 8 times).
-       repeat(...) is a special property that works with
-       display: grid; */
-  grid-template-columns: repeat(8, 1fr);
+  grid-template-columns: repeat(4, 1fr);
+  gap: 48px 28px;
+  padding: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+  margin-bottom: 20px;
 }
 
-/* @media is used to create responsive design (making the
-   website look good on any screen size). This @media
-   means when the screen width is 2000px or less, we
-   will divide the grid into 7 columns instead of 8. */
 @media (max-width: 2000px) {
   .products-grid {
     grid-template-columns: repeat(7, 1fr);
   }
 }
 
-/* This @media means when the screen width is 1600px or
-   less, we will divide the grid into 6 columns. */
 @media (max-width: 1600px) {
   .products-grid {
     grid-template-columns: repeat(6, 1fr);
@@ -66,64 +59,83 @@
 }
 
 .product-container {
-  padding-top: 40px;
-  padding-bottom: 25px;
-  padding-left: 25px;
-  padding-right: 25px;
-
-  border-right: 1px solid rgb(231, 231, 231);
-  border-bottom: 1px solid rgb(231, 231, 231);
-
+  padding: 16px;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border: 1px solid #f0f0f0;
   display: flex;
   flex-direction: column;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  height: 100%;
+  min-width: 0;
+  position: relative;
+}
+
+.product-container:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  transform: translateY(-4px);
+  border-color: #ff9900;
+  z-index: 10;
 }
 
 .product-image-container {
   display: flex;
   justify-content: center;
   align-items: center;
-
   height: 180px;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
+  background: linear-gradient(135deg, #f9f9f9 0%, #f5f5f5 100%);
+  border-radius: 8px;
 }
 
 .product-image {
-  /* Images will overflow their container by default. To
-    prevent this, we set max-width and max-height to 100%
-    so they stay inside their container. */
   max-width: 100%;
   max-height: 100%;
+  object-fit: contain;
 }
 
 .product-name {
   height: 40px;
-  margin-bottom: 5px;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #111;
+  font-size: 14px;
+  line-height: 1.4;
 }
 
 .product-rating-container {
   display: flex;
+  margin-top: 10px;
   align-items: center;
   margin-bottom: 10px;
+  gap: 6px;
 }
 
 .product-rating-stars {
   width: 100px;
-  margin-right: 6px;
 }
 
 .product-rating-count {
-  color: rgb(1, 124, 182);
+  color: #0066c0;
   cursor: pointer;
-  margin-top: 3px;
+  font-size: 12px;
+  transition: color 0.2s ease;
+}
+
+.product-rating-count:hover {
+  color: #ff9900;
 }
 
 .product-price {
+  color: #ff9900;
   font-weight: 700;
   margin-bottom: 10px;
+  font-size: 18px;
 }
 
 .product-quantity-container {
-  margin-bottom: 17px;
+  margin-bottom: 15px;
 }
 
 .product-spacer {
@@ -131,26 +143,30 @@
 }
 
 .added-to-cart {
-  color: rgb(6, 125, 98);
+  color: #06a663;
   font-size: 16px;
-
+  font-weight: 600;
   display: flex;
   align-items: center;
   margin-bottom: 8px;
-
-  /* At first, the "Added to cart" message will
-     be invisible. Use JavaScript to change the
-     opacity and make it visible. */
   opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
 .added-to-cart img {
   height: 20px;
-  margin-right: 5px;
+  margin-right: 8px;
 }
 
 .add-to-cart-button {
   width: 100%;
-  padding: 8px;
+  padding: 10px;
   border-radius: 50px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.add-to-cart-button:hover {
+  box-shadow: 0 4px 12px rgba(255, 153, 0, 0.3);
+  transform: translateY(-1px);
 }

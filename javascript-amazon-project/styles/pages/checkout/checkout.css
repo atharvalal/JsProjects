@@ -1,40 +1,36 @@
 .main {
-  max-width: 1100px;
-  padding-left: 30px;
-  padding-right: 30px;
+  max-width: 1200px;
+  padding-left: 20px;
+  padding-right: 20px;
 
   margin-top: 140px;
   margin-bottom: 100px;
 
-  /* margin-left: auto;
-     margin-right auto;
-     Is a trick for centering an element horizontally
-     without needing a container. */
   margin-left: auto;
   margin-right: auto;
 }
 
 .page-title {
   font-weight: 700;
-  font-size: 22px;
-  margin-bottom: 18px;
+  font-size: 32px;
+  margin-bottom: 32px;
+  color: #111;
+  letter-spacing: -0.5px;
 }
 
 .checkout-grid {
   display: grid;
-  /* Here, 1fr means the first column will take
-     up the remaining space in the grid. */
-  grid-template-columns: 1fr 350px;
-  column-gap: 12px;
+  grid-template-columns: 1fr;
+  column-gap: 24px;
 
-  /* Use align-items: start; to prevent the elements
-     in the grid from stretching vertically. */
   align-items: start;
 }
 
 @media (max-width: 1000px) {
   .main {
-    max-width: 500px;
+    max-width: 100%;
+    padding-left: 16px;
+    padding-right: 16px;
   }
 
   .checkout-grid {
@@ -44,168 +40,326 @@
 
 .cart-item-container,
 .payment-summary {
-  border: 1px solid rgb(222, 222, 222);
-  border-radius: 4px;
-  padding: 18px;
+  border: 1px solid #e8e8e8;
+  border-radius: 12px;
+  padding: 20px;
+  background-color: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.cart-item-container:hover {
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+  border-color: #ff9900;
 }
 
 .cart-item-container {
-  margin-bottom: 12px;
+  margin-bottom: 16px;
 }
 
 .payment-summary {
-  padding-bottom: 5px;
+  padding: 24px;
+  background: linear-gradient(135deg, #ffffff 0%, #f9f9f9 100%);
+  border: 2px solid #e8e8e8;
+  position: relative;
+  order: -1;
+  margin-bottom: 32px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 @media (max-width: 1000px) {
   .payment-summary {
-    /* grid-row: 1 means this element will be placed into row
-      1 in the grid. (Normally, the row that an element is
-      placed in is determined by the order of the elements in
-      the HTML. grid-row overrides this default ordering). */
     grid-row: 1;
-    margin-bottom: 12px;
+    margin-bottom: 24px;
+    position: static;
   }
 }
 
 .delivery-date {
-  color: rgb(0, 118, 0);
+  color: #00a651;
   font-weight: 700;
-  font-size: 19px;
-  margin-top: 5px;
-  margin-bottom: 22px;
+  font-size: 14px;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid #f0f0f0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .cart-item-details-grid {
   display: grid;
-  /* 100px 1fr 1fr; means the 2nd and 3rd column will
-     take up half the remaining space in the grid
-     (they will divide up the remaining space evenly). */
-  grid-template-columns: 100px 1fr 1fr;
-  column-gap: 25px;
+  grid-template-columns: 110px 1fr 1fr;
+  column-gap: 20px;
+  align-items: start;
 }
 
 @media (max-width: 1000px) {
   .cart-item-details-grid {
     grid-template-columns: 100px 1fr;
-    row-gap: 30px;
+    row-gap: 24px;
   }
 }
 
 .product-image {
   max-width: 100%;
-  max-height: 120px;
+  max-height: 140px;
 
-  /* margin-left: auto;
-     margin-right auto;
-     Is a trick for centering an element horizontally
-     without needing a container. */
   margin-left: auto;
   margin-right: auto;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  padding: 12px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
 }
 
 .product-name {
-  font-weight: 700;
+  font-weight: 600;
   margin-bottom: 8px;
+  font-size: 15px;
+  color: #111;
+  line-height: 1.4;
 }
 
 .product-price {
-  color: rgb(177, 39, 4);
+  color: #c60;
   font-weight: 700;
-  margin-bottom: 5px;
+  margin-bottom: 12px;
+  font-size: 18px;
+}
+
+.product-quantity {
+  font-size: 13px;
+  color: #666;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.product-quantity span {
+  display: inline-block;
 }
 
 .product-quantity .link-primary {
-  margin-left: 3px;
+  font-weight: 600;
+  color: #0066c0;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+}
+
+.product-quantity .link-primary:hover {
+  color: #c60;
+  border-bottom-color: #c60;
+}
+
+.quantity-input {
+  padding: 8px 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  width: 70px;
+  font-weight: 500;
+  transition: border-color 0.2s ease;
+}
+
+.quantity-input:focus {
+  outline: none;
+  border-color: #0066c0;
+  box-shadow: 0 0 0 3px rgba(0, 102, 192, 0.1);
 }
 
 @media (max-width: 1000px) {
   .delivery-options {
-    /* grid-column: 1 means this element will be placed
-       in column 1 in the grid. (Normally, the column that
-       an element is placed in is determined by the order
-       of the elements in the HTML. grid-column overrides
-       this default ordering).
-       
-       / span 2 means this element will take up 2 columns
-       in the grid (Normally, each element takes up 1
-       column in the grid). */
     grid-column: 1 / span 2;
   }
 }
 
+.delivery-options {
+  background-color: #f9f9f9;
+  padding: 16px;
+  border-radius: 8px;
+  margin-top: 16px;
+  border: 1px solid #f0f0f0;
+}
+
 .delivery-options-title {
   font-weight: 700;
-  margin-bottom: 10px;
+  margin-bottom: 14px;
+  font-size: 13px;
+  color: #111;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .delivery-option {
   display: grid;
-  grid-template-columns: 24px 1fr;
+  grid-template-columns: 20px 1fr;
   margin-bottom: 12px;
   cursor: pointer;
+  padding: 10px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  gap: 12px;
+}
+
+.delivery-option:hover {
+  background-color: #f0f0f0;
 }
 
 .delivery-option-input {
-  margin-left: 0px;
   cursor: pointer;
+  accent-color: #0066c0;
+  width: 20px;
+  height: 20px;
+  margin-top: 2px;
 }
 
 .delivery-option-date {
-  color: rgb(0, 118, 0);
-  font-weight: 500;
-  margin-bottom: 3px;
+  color: #00a651;
+  font-weight: 600;
+  margin-bottom: 2px;
+  font-size: 14px;
 }
 
 .delivery-option-price {
-  color: rgb(120, 120, 120);
-  font-size: 15px;
+  color: #666;
+  font-size: 13px;
 }
 
 .payment-summary-title {
   font-weight: 700;
-  font-size: 18px;
-  margin-bottom: 12px;
+  font-size: 20px;
+  margin-bottom: 20px;
+  color: #111;
+  padding-bottom: 16px;
+  border-bottom: 2px solid #e8e8e8;
 }
 
 .payment-summary-row {
   display: grid;
-  /* 1fr auto; means the width of the 2nd column will be
-     determined by the elements inside the column (auto).
-     The 1st column will take up the remaining space. */
   grid-template-columns: 1fr auto;
 
-  font-size: 15px;
-  margin-bottom: 9px;
+  font-size: 14px;
+  margin-bottom: 12px;
+  color: #666;
 }
 
-.payment-summary-money {
+.payment-summary-row div:last-child {
   text-align: right;
 }
 
-.subtotal-row .payment-summary-money {
-  border-top: 1px solid rgb(222, 222, 222);
+.payment-summary-money {
+  font-weight: 500;
+  color: #111;
 }
 
-.subtotal-row div {
-  padding-top: 9px;
+.subtotal-row .payment-summary-money {
+  border-top: 1px solid #e8e8e8;
+}
+
+.subtotal-row {
+  padding-top: 12px;
+  margin-top: 4px;
+}
+
+.subtotal-row div:first-child {
+  color: #111;
+  font-weight: 600;
 }
 
 .total-row {
-  color: rgb(177, 39, 4);
+  color: #c60;
   font-weight: 700;
-  font-size: 18px;
+  font-size: 16px;
 
-  border-top: 1px solid rgb(222, 222, 222);
-  padding-top: 18px;
+  border-top: 2px solid #e8e8e8;
+  padding-top: 14px;
+  margin-top: 8px;
 }
 
 .place-order-button {
   width: 100%;
-  padding-top: 12px;
-  padding-bottom: 12px;
+  padding: 14px 16px;
   border-radius: 8px;
   text-decoration: none;
-  margin-top: 11px;
-  margin-bottom: 15px;
+  margin-top: 20px;
+  background: linear-gradient(135deg, #ff9900 0%, #ff8800 100%);
+  color: #111;
+  font-weight: 600;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(255, 153, 0, 0.3);
+}
+
+.place-order-button:hover {
+  background: linear-gradient(135deg, #ff8800 0%, #ff7700 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 153, 0, 0.4);
+}
+
+.place-order-button:active {
+  transform: translateY(0);
+}
+
+.empty-cart {
+  text-align: center;
+  padding: 80px 40px;
+  background-color: #f9f9f9;
+  border-radius: 12px;
+  border: 2px dashed #ddd;
+}
+
+.empty-cart h2 {
+  font-size: 28px;
+  color: #111;
+  margin-bottom: 12px;
+  font-weight: 700;
+}
+
+.empty-cart p {
+  color: #666;
+  margin-bottom: 28px;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.continue-shopping-button {
+  display: inline-block;
+  padding: 12px 32px;
+  background-color: #0066c0;
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 15px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 6px rgba(0, 102, 192, 0.2);
+}
+
+.continue-shopping-button:hover {
+  background-color: #005399;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 102, 192, 0.3);
+}
+
+.save-quantity-link,
+.cancel-quantity-link {
+  font-weight: 600;
+  color: #0066c0;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  font-size: 13px;
+}
+
+.save-quantity-link:hover,
+.cancel-quantity-link:hover {
+  color: #c60;
+  border-bottom-color: #c60;
 }

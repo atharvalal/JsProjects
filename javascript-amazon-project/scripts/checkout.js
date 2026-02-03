@@ -1,40 +1,50 @@
 import {cart, removeFromCart, saveToCart} from "../data/cart.js";
 import {products} from "../data/products.js";
 import {formatCurrency} from "./utils/money.js";
+import dayjs from 'https://unpkg.com/dayjs@1.11.19/esm/index.js';
 
+const today = dayjs();
+let thirdDate = today.format('dddd, MMMM D');
+let secondDate = today.add(3, "days").format('dddd, MMMM D');
+const freeDeliveryDate = today.add(7, 'days');
+let freeDate = (freeDeliveryDate.format('dddd, MMMM D'));
 const cartContent = document.querySelector('.js-checkout-grid');
 const checkoutContent = document.querySelector('.js-checkout-icon');
 
+
+
 function renderCart() {
-    if (cart.length === 0) {
+    if ( cart.length === 0) {
         cartContent.innerHTML = `
       <div class="empty-cart">
         <h2>Your cart is empty</h2>
         <p>Add some products to get started!</p>
-        <a href="//amazon.html" class="continue-shopping-button button-primary">Continue Shopping</a>
+        <a href="amazon.html" class="continue-shopping-button button-primary">Continue Shopping</a>
       </div>
     `;
-        checkoutContent.innerHTML = 'Checkout: 0';
-    } else {
-        let checkouthtml = '';
+        checkoutQuantity(); // Update the checkout header to show 0
+        return; // Exit early
+    }
+    
+    let checkouthtml = '';
 
-        cart.forEach((item) => {
-            const productID = item.productId
-            let matchingProduct
-            products.forEach((product) => {
-                if (product.id === productID) {
-                    matchingProduct = product;
-                }
-
-            })
-            checkouthtml += `
-        <div class="cart-item-container js-cart-item-container-${productID}"   data-product-id="${productID}">
+    cart.forEach((item) => {
+        const productID = item.productId;
+        const matchingProduct = products.find(product => product.id === productID);
+        
+        if (!matchingProduct) {
+            console.error('Product not found:', productID);
+            return; // Skip this item
+        }
+        
+        checkouthtml += `
+        <div class="cart-item-container js-cart-item-container-${productID}" data-product-id="${productID}">
           <div class="delivery-date">
             Delivery date: Tuesday, June 21
           </div>
 
           <div class="cart-item-details-grid">
-            <img class="product-image" src="${matchingProduct.image}" alt="${item.name}">
+            <img class="product-image" src="${matchingProduct.image}" alt="${matchingProduct.name}">
 
             <div class="cart-item-details">
               <div class="product-name">${matchingProduct.name}</div>
@@ -56,7 +66,7 @@ function renderCart() {
                   data-price="0"
                   data-product-id="${productID}">
                 <div>
-                  <div class="delivery-option-date">Tuesday, June 21</div>
+                  <div class="delivery-option-date">${freeDate}</div>
                   <div class="delivery-option-price">FREE Shipping</div>
                 </div>
               </div>
@@ -66,7 +76,7 @@ function renderCart() {
                   data-price="499"
                   data-product-id="${productID}">
                 <div>
-                  <div class="delivery-option-date">Wednesday, June 15</div>
+                  <div class="delivery-option-date">${secondDate}</div>
                   <div class="delivery-option-price">$4.99 - Shipping</div>
                 </div>
               </div>
@@ -76,7 +86,7 @@ function renderCart() {
                   data-price="999"
                   data-product-id="${productID}">
                 <div>
-                  <div class="delivery-option-date">Monday, June 13</div>
+                  <div class="delivery-option-date">${thirdDate}</div>
                   <div class="delivery-option-price">$9.99 - Shipping</div>
                 </div>
               </div>
@@ -84,10 +94,10 @@ function renderCart() {
           </div>
         </div>
       `;
-        });
+    });
 
-        // Add payment summary outside the loop
-        checkouthtml += `
+    // Add payment summary outside the loop
+    checkouthtml += `
       <div class="payment-summary">
         <div class="payment-summary-title">
           Order Summary
@@ -124,13 +134,13 @@ function renderCart() {
       </div>
     `;
 
-        cartContent.innerHTML = checkouthtml;
+    cartContent.innerHTML = checkouthtml;
 
-        attachDeliveryListeners();
-        attachPlaceOrderListener();
-        updateOrderSummary();
-        checkoutQuantity();
-    }
+    // Call these after DOM is updated
+    attachDeliveryListeners();
+    attachPlaceOrderListener();
+    updateOrderSummary();
+    checkoutQuantity();
 }
 
 // Use event delegation on the parent container
@@ -142,10 +152,17 @@ cartContent.addEventListener('click', (e) => {
         removeFromCart(productID);
 
         const container = document.querySelector(`.js-cart-item-container-${productID}`);
-        container.remove();
+        if (container) {
+            container.remove();
+        }
 
         updateOrderSummary();
         checkoutQuantity();
+        
+        // Re-render if cart is empty
+        if (cart.length === 0) {
+            renderCart();
+        }
     }
 
     // Handle update button
@@ -155,54 +172,59 @@ cartContent.addEventListener('click', (e) => {
 
         // Find the current quantity
         let currentQuantity = 1;
-        cart.forEach((item) => {
-            if (item.productId === productID) {
-                currentQuantity = item.quantity;
-            }
-        });
+        const cartItem = cart.find(item => item.productId === productID);
+        if (cartItem) {
+            currentQuantity = cartItem.quantity;
+        }
 
         // Show input field
         const quantityContainer = document.querySelector(`.js-quantity-container-${productID}`);
-        quantityContainer.innerHTML = `
-            <input type="number" class="quantity-input js-quantity-input-${productID}" value="${currentQuantity}" min="1">
-            <span class="save-quantity-link link-primary js-save-quantity" data-product-id="${productID}">Save</span>
-            <span class="cancel-quantity-link link-primary js-cancel-quantity" data-product-id="${productID}">Cancel</span>
-        `;
+        if (quantityContainer) {
+            quantityContainer.innerHTML = `
+                <input type="number" class="quantity-input js-quantity-input-${productID}" value="${currentQuantity}" min="1">
+                <span class="save-quantity-link link-primary js-save-quantity" data-product-id="${productID}">Save</span>
+                <span class="cancel-quantity-link link-primary js-cancel-quantity" data-product-id="${productID}">Cancel</span>
+            `;
+        }
     }
 
     // Handle save button
     if (e.target.classList.contains('js-save-quantity')) {
         e.preventDefault();
         const productID = e.target.dataset.productId;
-        const newQuantity = Number(document.querySelector(`.js-quantity-input-${productID}`).value);
+        const inputElement = document.querySelector(`.js-quantity-input-${productID}`);
+        
+        if (!inputElement) return;
+        
+        const newQuantity = Number(inputElement.value);
 
         if (newQuantity > 0) {
             // Update the quantity in cart
-            cart.forEach((item) => {
-                if (item.productId === productID) {
-                    item.quantity = newQuantity;
-                }
-            });
+            const cartItem = cart.find(item => item.productId === productID);
+            if (cartItem) {
+                cartItem.quantity = newQuantity;
+            }
 
             // Save to localStorage
             saveToCart();
 
             // Update the display
             const quantityContainer = document.querySelector(`.js-quantity-container-${productID}`);
-            quantityContainer.innerHTML = `
-                <span>
-                  Quantity: <span class="quantity-label js-quantity-label-${productID}">${newQuantity}</span>
-                </span>
-                <span class="update-quantity-link link-primary js-update-btn" data-product-id="${productID}">Update</span>
-                <span class="delete-quantity-link link-primary js-delete-btn" data-product-id="${productID}">Delete</span>
-            `;
+            if (quantityContainer) {
+                quantityContainer.innerHTML = `
+                    <span>
+                      Quantity: <span class="quantity-label js-quantity-label-${productID}">${newQuantity}</span>
+                    </span>
+                    <span class="update-quantity-link link-primary js-update-btn" data-product-id="${productID}">Update</span>
+                    <span class="delete-quantity-link link-primary js-delete-btn" data-product-id="${productID}">Delete</span>
+                `;
+            }
 
             updateOrderSummary();
             checkoutQuantity();
         } else {
-            alert("Min Quantity must be 1 !!!")
+            alert("Min Quantity must be 1!");
         }
-        
     }
 
     // Handle cancel button
@@ -212,21 +234,22 @@ cartContent.addEventListener('click', (e) => {
 
         // Find the current quantity
         let currentQuantity = 1;
-        cart.forEach((item) => {
-            if (item.productId === productID) {
-                currentQuantity = item.quantity;
-            }
-        });
+        const cartItem = cart.find(item => item.productId === productID);
+        if (cartItem) {
+            currentQuantity = cartItem.quantity;
+        }
 
         // Restore the original display
         const quantityContainer = document.querySelector(`.js-quantity-container-${productID}`);
-        quantityContainer.innerHTML = `
-            <span>
-              Quantity: <span class="quantity-label js-quantity-label-${productID}">${currentQuantity}</span>
-            </span>
-            <span class="update-quantity-link link-primary js-update-btn" data-product-id="${productID}">Update</span>
-            <span class="delete-quantity-link link-primary js-delete-btn" data-product-id="${productID}">Delete</span>
-        `;
+        if (quantityContainer) {
+            quantityContainer.innerHTML = `
+                <span>
+                  Quantity: <span class="quantity-label js-quantity-label-${productID}">${currentQuantity}</span>
+                </span>
+                <span class="update-quantity-link link-primary js-update-btn" data-product-id="${productID}">Update</span>
+                <span class="delete-quantity-link link-primary js-delete-btn" data-product-id="${productID}">Delete</span>
+            `;
+        }
     }
 });
 
@@ -254,7 +277,10 @@ function updateOrderSummary() {
     let totalItems = 0;
 
     cart.forEach((item) => {
-        itemsTotal += (item.price * item.quantity);
+        const matchingProduct = products.find(p => p.id === item.productId);
+        if (matchingProduct) {
+            itemsTotal += (matchingProduct.priceCents * item.quantity);
+        }
         totalItems += Number(item.quantity);
     });
 
@@ -275,13 +301,20 @@ function updateOrderSummary() {
     // Calculate order total
     const orderTotal = subtotal + tax;
 
-    // Update the DOM
-    document.querySelector('.js-total-items').textContent = totalItems;
-    document.querySelector('.js-items-total').textContent = `$${(itemsTotal / 100).toFixed(2)}`;
-    document.querySelector('.js-shipping-cost').textContent = `$${(shippingTotal / 100).toFixed(2)}`;
-    document.querySelector('.js-subtotal').textContent = `$${(subtotal / 100).toFixed(2)}`;
-    document.querySelector('.js-tax').textContent = `$${(tax / 100).toFixed(2)}`;
-    document.querySelector('.js-order-total').textContent = `$${(orderTotal / 100).toFixed(2)}`;
+    // Update the DOM safely
+    const totalItemsEl = document.querySelector('.js-total-items');
+    const itemsTotalEl = document.querySelector('.js-items-total');
+    const shippingCostEl = document.querySelector('.js-shipping-cost');
+    const subtotalEl = document.querySelector('.js-subtotal');
+    const taxEl = document.querySelector('.js-tax');
+    const orderTotalEl = document.querySelector('.js-order-total');
+
+    if (totalItemsEl) totalItemsEl.textContent = totalItems;
+    if (itemsTotalEl) itemsTotalEl.textContent = `$${(itemsTotal / 100).toFixed(2)}`;
+    if (shippingCostEl) shippingCostEl.textContent = `$${(shippingTotal / 100).toFixed(2)}`;
+    if (subtotalEl) subtotalEl.textContent = `$${(subtotal / 100).toFixed(2)}`;
+    if (taxEl) taxEl.textContent = `$${(tax / 100).toFixed(2)}`;
+    if (orderTotalEl) orderTotalEl.textContent = `$${(orderTotal / 100).toFixed(2)}`;
 }
 
 function checkoutQuantity() {
@@ -289,7 +322,13 @@ function checkoutQuantity() {
     cart.forEach((item) => {
         totalItems += Number(item.quantity);
     });
-    checkoutContent.innerHTML = `Checkout: ${totalItems}`;
+    if (checkoutContent) {
+        if (totalItems === 0) {
+            checkoutContent.innerHTML = `Checkout`;
+        } else {
+            checkoutContent.innerHTML = `Checkout (${totalItems})`;
+        }
+    }
 }
 
 // Initial render

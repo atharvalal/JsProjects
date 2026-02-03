@@ -4,19 +4,15 @@
   margin-bottom: 100px;
   padding-left: 20px;
   padding-right: 20px;
-
-  /* margin-left: auto;
-     margin-right auto;
-     Is a trick for centering an element horizontally
-     without needing a container. */
   margin-left: auto;
   margin-right: auto;
 }
 
 .page-title {
   font-weight: 700;
-  font-size: 26px;
-  margin-bottom: 25px;
+  font-size: 32px;
+  margin-bottom: 30px;
+  color: #111;
 }
 
 .orders-grid {
@@ -25,16 +21,15 @@
   row-gap: 50px;
 }
 
-.order-header {
-  background-color: rgb(240, 242, 242);
-  border: 1px solid rgb(213, 217, 217);
-
+.order-heade: linear-gradient(135deg, #f5f5f5 0%, #f9f9f9 100%);
+  border: 1px solid #e8e8e8;
   display: flex;
   align-items: center;
   justify-content: space-between;
-
   padding: 20px 25px;
-  border-top-left-radius: 8px;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05)
   border-top-right-radius: 8px;
 }
 
@@ -88,10 +83,12 @@
 .order-details-grid {
   padding: 40px 25px;
   border: 1px solid rgb(213, 217, 217);
+  border-top: none;#e8e8e8;
   border-top: none;
-  border-bottom-left-radius: 8px;
-  border-bottom-right-radius: 8px;
-
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+  background-color: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06)
   display: grid;
   grid-template-columns: 110px 1fr 220px;
   column-gap: 35px;
@@ -123,6 +120,7 @@
 }
 
 .product-name {
+  color: #111;
   font-weight: 700;
   margin-bottom: 5px;
 }

@@ -1,9 +1,9 @@
 body {
-  font-family: Roboto, Arial;
-  color: rgb(33, 33, 33);
-  /* The <body> element has a default margin of 8px
-     on all sides. This removes the default margins. */
+  font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+  color: #212121;
   margin: 0;
+  background: linear-gradient(135deg, #f5f5f5 0%, #fafafa 100%);
+  min-height: 100vh;
 }
 
 /* <p> elements have a default margin on the top
@@ -25,15 +25,19 @@ input, select, button {
 }
 
 .button-primary {
-  color: rgb(33, 33, 33);
-  background-color: rgb(255, 216, 20);
-  border: 1px solid rgb(252, 210, 0);
+  color: #111;
+  background: linear-gradient(135deg, #FFD54F 0%, #FFC400 100%);
+  border: 1px solid #FBC200;
   border-radius: 8px;
   cursor: pointer;
-  box-shadow: 0 2px 5px rgba(213, 217, 217, 0.5);
+  box-shadow: 0 4px 12px rgba(255, 200, 0, 0.3);
+  transition: all 0.3s ease;
+  font-weight: 600;
 }
-
-.button-primary:hover {
+: linear-gradient(135deg, #FFCA28 0%, #FFB300 100%);
+  border: 1px solid #F2A200;
+  box-shadow: 0 6px 20px rgba(255, 200, 0, 0.4);
+  transform: translateY(-2px
   background-color: rgb(247, 202, 0);
   border: 1px solid rgb(242, 194, 0);
 }
@@ -43,14 +47,19 @@ input, select, button {
   border-color: rgb(252, 210, 0);
   box-shadow: none;
 }
-
-.button-secondary {
-  color: rgb(33, 33, 33);
+#111;
   background: white;
-  border: 1px solid rgb(213, 217, 217);
+  border: 2px solid #ddd;
   border-radius: 8px;
   cursor: pointer;
-  box-shadow: 0 2px 5px rgba(213, 217, 217, 0.5);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  font-weight: 600
+  cursor: pointer;
+  box-shadow: 0 2px #f8f9fa;
+  border-color: #999;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px, 217, 0.5);
 }
 
 .button-secondary:hover {
@@ -78,16 +87,16 @@ input, select, button {
   color: rgb(1, 124, 182);
   cursor: pointer;
 }
-
-.link-primary:hover {
-  color: rgb(196, 80, 0);
-}
-
-/* Styles for dropdown selectors. */
 select {
-  color: rgb(33, 33, 33);
-  background-color: rgb(240, 240, 240);
-  border: 1px solid rgb(213, 217, 217);
+  color: #111;
+  background-color: #f5f5f5;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 15px;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+  transition: all 0.2s ease
   border-radius: 8px;
   padding: 3px 5px;
   font-size: 15px;
