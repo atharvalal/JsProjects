@@ -27,3 +27,14 @@ export function getDeliveryOption(deliveryOptionId) {
 
     return deliveryOption || deliveryOptions[0];
 }
+
+export function SkipWeekend(date) {
+    let newDate = date;
+    
+    // Keep adding days until we're not on a weekend
+    while (newDate.day() === 0 || newDate.day() === 6) {
+        newDate = newDate.add(1, 'day');
+    }
+    
+    return newDate;
+}

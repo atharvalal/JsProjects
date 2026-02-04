@@ -2,7 +2,7 @@ import {cart, removeFromCart, saveToCart, updateDeliveryOption} from "../../data
 import {getProduct} from "../../data/products.js";
 import {formatCurrency} from "../utils/money.js";
 import dayjs from 'https://unpkg.com/dayjs@1.11.19/esm/index.js';
-import {deliveryOptions, getDeliveryOption} from "../../data/deliveryOptions.js";
+import {deliveryOptions, getDeliveryOption, SkipWeekend} from "../../data/deliveryOptions.js";
 import {renderPaymentSummary} from "./paymentSummary.js";
 
 const cartContent = document.querySelector('.js-checkout-grid');
@@ -33,10 +33,11 @@ export function renderCart() {
         }
 
         const deliveryOptionId = item.deliveryOptionId || '1';
-        const deliveryOption = getDeliveryOption(deliveryOptionId);
+        const choosenDeliveryOption = getDeliveryOption(deliveryOptionId);
         
-        const today = dayjs();
-        const deliveryDate = today.add(deliveryOption.deliveryDays, 'day').format('dddd, MMMM D');
+        let date = dayjs().add(choosenDeliveryOption.deliveryDays, 'day');
+        date = SkipWeekend(date);
+        const deliveryDate = date.format('dddd, MMMM D');
 
         checkouthtml += `
         <div class="cart-item-container js-cart-item-container js-cart-item-container-${productID}" data-product-id="${productID}">
@@ -67,7 +68,6 @@ export function renderCart() {
             </div>
           </div>
         </div>
-        
       `;
     });
 
@@ -82,8 +82,10 @@ export function renderCart() {
 function deliveryDateOption(matchingProduct, item) {
     let optionsHTML = '';
     deliveryOptions.forEach((option) => {
-        const today = dayjs();
-        const deliveryDate = today.add(option.deliveryDays, 'day').format('dddd, MMMM D');
+        // Calculate delivery date and skip weekends
+        let date = dayjs().add(option.deliveryDays, 'day');
+        date = SkipWeekend(date);
+        const deliveryDate = date.format('dddd, MMMM D');
 
         const priceString = option.priceCents === 0 
             ? 'FREE Shipping' 
