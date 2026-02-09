@@ -1,11 +1,14 @@
 import {cart, addToCart} from "../data/cart.js";
-import {products} from "../data/products.js";
+import {products, loadProducts} from "../data/products.js";
 
+loadProducts(renderProductsGrid);
 
-let productsHTML = '';
+function renderProductsGrid() {
 
-products.forEach((product) => {
-    productsHTML += `
+    let productsHTML = '';
+
+    products.forEach((product) => {
+        productsHTML += `
     <div class="product-container">
           <div class="product-image-container">
             <img class="product-image"
@@ -60,38 +63,39 @@ products.forEach((product) => {
             Add to Cart
           </button>
         </div>`;
-})
-
-document.querySelector('.js-products-grid')
-    .innerHTML = productsHTML
-
-
-function updateCartQuantity() {
-    let cartQuantity = 0
-    cart.forEach((cartItem) => {
-        cartQuantity += cartItem.quantity
     })
 
-    document.querySelector('.js-cart-quantity')
-        .innerHTML = cartQuantity
-}
+    document.querySelector('.js-products-grid')
+        .innerHTML = productsHTML
 
 
-document.querySelectorAll('.js-add-to-cart')
-    .forEach((button) => {
-        button.addEventListener('click', () => {
-            const productId = button.dataset.productId
-            const productName = button.dataset.productName
-            const productPrice = Number(button.dataset.productPrice)
-            const productImage = button.dataset.productImage
-
-            const productSelector = document.querySelector(`.js-product-quantity-container-${productId}`)
-            const quantity = Number(productSelector.value)
-
-            addToCart(productId, productName, productPrice, productImage, quantity)
-            productSelector.value = '1'
-            updateCartQuantity()
-
-
+    function updateCartQuantity() {
+        let cartQuantity = 0
+        cart.forEach((cartItem) => {
+            cartQuantity += cartItem.quantity
         })
-    })
+
+        document.querySelector('.js-cart-quantity')
+            .innerHTML = cartQuantity
+    }
+
+
+    document.querySelectorAll('.js-add-to-cart')
+        .forEach((button) => {
+            button.addEventListener('click', () => {
+                const productId = button.dataset.productId
+                const productName = button.dataset.productName
+                const productPrice = Number(button.dataset.productPrice)
+                const productImage = button.dataset.productImage
+
+                const productSelector = document.querySelector(`.js-product-quantity-container-${productId}`)
+                const quantity = Number(productSelector.value)
+
+                addToCart(productId, productName, productPrice, productImage, quantity)
+                productSelector.value = '1'
+                updateCartQuantity()
+
+
+            })
+        })
+}
