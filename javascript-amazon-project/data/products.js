@@ -77,10 +77,9 @@ export function loadProducts(fun) {
     })
     xhr.open('GET', 'https://supersimplebackend.dev/products')
     xhr.send();
-    
+
 
 }
-
 
 // export const products = [
 //     {
@@ -750,4 +749,3 @@ export function loadProducts(fun) {
 //         }
 //         return new Product(productDetails)
 //     });
-

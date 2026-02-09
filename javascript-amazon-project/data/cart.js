@@ -1,3 +1,5 @@
+import {products} from "./products.js";
+
 export let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
 export function saveToCart() {
@@ -46,9 +48,22 @@ export function updateDeliveryOption(productId, deliveryOptionId) {
             matchingItem = cartItem;
         }
     });
-    
+
     if (matchingItem) {
         matchingItem.deliveryOptionId = deliveryOptionId;
         saveToCart();
     }
+}
+
+export function loadCart(fun) {
+    const xhr = new XMLHttpRequest()
+
+    xhr.addEventListener('load', () => {
+        console.log(xhr.response)
+        fun();
+    })
+    xhr.open('GET', 'https://supersimplebackend.dev/cart')
+    xhr.send();
+
+
 }

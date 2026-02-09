@@ -4,6 +4,7 @@ import {formatCurrency} from "../utils/money.js";
 import dayjs from 'https://unpkg.com/dayjs@1.11.19/esm/index.js';
 import {deliveryOptions, getDeliveryOption, SkipWeekend} from "../../data/deliveryOptions.js";
 import {renderPaymentSummary} from "./paymentSummary.js";
+import {loadProducts} from "../../data/products.js";
 
 const cartContent = document.querySelector('.js-checkout-grid');
 const checkoutContent = document.querySelector('.js-checkout-icon');
