@@ -20,13 +20,13 @@ export function renderCart() {
         updateCheckoutQuantity();
         return;
     }
-    
+
     let checkouthtml = '';
 
     cart.forEach((item) => {
         const productID = item.productId;
         const matchingProduct = getProduct(productID);
-        
+
         if (!matchingProduct) {
             console.error('Product not found:', productID);
             return;
@@ -34,7 +34,7 @@ export function renderCart() {
 
         const deliveryOptionId = item.deliveryOptionId || '1';
         const choosenDeliveryOption = getDeliveryOption(deliveryOptionId);
-        
+
         let date = dayjs().add(choosenDeliveryOption.deliveryDays, 'day');
         date = SkipWeekend(date);
         const deliveryDate = date.format('dddd, MMMM D');
@@ -50,7 +50,7 @@ export function renderCart() {
 
             <div class="cart-item-details">
               <div class="product-name">${matchingProduct.name}</div>
-              <div class="product-price">$${formatCurrency(matchingProduct.priceCents)}</div>
+              <div class="product-price">$${matchingProduct.getPrice()}</div>
               <div class="product-quantity js-quantity-container-${productID}">
                 <span>
                   Quantity: <span class="quantity-label js-quantity-label-${productID}">${item.quantity}</span>
@@ -87,12 +87,12 @@ function deliveryDateOption(matchingProduct, item) {
         date = SkipWeekend(date);
         const deliveryDate = date.format('dddd, MMMM D');
 
-        const priceString = option.priceCents === 0 
-            ? 'FREE Shipping' 
+        const priceString = option.priceCents === 0
+            ? 'FREE Shipping'
             : `$${formatCurrency(option.priceCents)} - Shipping`;
-        
+
         const isChecked = option.id === item.deliveryOptionId;
-        
+
         optionsHTML += `
             <div class="delivery-option js-delivery-option"
                  data-product-id="${matchingProduct.id}"
@@ -169,7 +169,7 @@ function attachDeliveryListeners() {
         element.addEventListener('click', () => {
             const productId = element.dataset.productId;
             const deliveryOptionId = element.dataset.deliveryOptionId;
-            
+
             updateDeliveryOption(productId, deliveryOptionId);
             renderCart();
             renderPaymentSummary();
@@ -182,7 +182,7 @@ function updateCheckoutQuantity() {
     cart.forEach((item) => {
         totalItems += Number(item.quantity);
     });
-    
+
     if (checkoutContent) {
         if (totalItems === 0) {
             checkoutContent.innerHTML = `Checkout`;
