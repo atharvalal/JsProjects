@@ -75,8 +75,15 @@ export function loadProductsFetch() {
 
 
         })
+    /*
+    .catch(() => {
+        alert('error loading products, please try again later')
+    })
+
+     */
     return promise;
 }
+
 
 /*
 loadProductsFetch().then(() => {
@@ -100,6 +107,11 @@ export function loadProducts(fun) {
 
         fun();
     })
+
+    xhr.addEventListener('error', () => {
+        alert('error loading products, please try again later')
+    })
+
     xhr.open('GET', 'https://supersimplebackend.dev/products')
     xhr.send();
 

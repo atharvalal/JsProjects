@@ -55,6 +55,11 @@ export function updateDeliveryOption(productId, deliveryOptionId) {
     }
 }
 
+export function clearCart() {
+    cart = [];
+    saveToCart();
+}
+
 export function loadCart(fun) {
     const xhr = new XMLHttpRequest()
 
