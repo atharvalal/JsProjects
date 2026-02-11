@@ -103,10 +103,28 @@ function attachBuyAgainListeners() {
             const productId = button.dataset.productId;
             const product = getProduct(productId);
 
-            if (product) {
-                addToCart(productId, product.name, product.priceCents, product.image, 1);
-                updateCartQuantity(); // Update cart quantity immediately
+            if (!product) return;
+
+            // Prompt user for quantity
+            let quantity = prompt(`Enter quantity for "${product.name}":`);
+            
+            // Handle cancel or empty input
+            if (quantity === null || quantity.trim() === '') {
+                return; // User cancelled or entered nothing
             }
+
+            // Convert to number and validate
+            quantity = parseInt(quantity, 10);
+            
+            // Validate that it's a valid number greater than 0
+            if (isNaN(quantity) || quantity < 1) {
+                alert('Please enter a valid quantity (1 or more).');
+                return;
+            }
+
+            // Add to cart with the entered quantity
+            addToCart(productId, product.name, product.priceCents, product.image, quantity);
+            updateCartQuantity(); // Update cart quantity immediately
 
             button.textContent = 'Added!';
             setTimeout(() => {
